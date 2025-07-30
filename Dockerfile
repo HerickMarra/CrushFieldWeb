@@ -33,6 +33,12 @@ RUN a2enmod rewrite
 # Instala as dependências do Laravel
 RUN composer install --no-dev --optimize-autoloader
 
+# Copia o .env.example para .env, se não existir
+RUN if [ ! -f .env ]; then cp .env.example .env; fi
+
+# Gera a chave da aplicação Laravel
+RUN php artisan key:generate
+
 # Configura o Apache para apontar para a pasta public do Laravel
 RUN echo '<VirtualHost *:80>\n\
     DocumentRoot /var/www/html/public\n\
